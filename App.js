@@ -1,43 +1,28 @@
-import * as React from 'react';
-
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-
+import { StyleSheet, Text, View, Button, TextInput, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 import SecondPage from './src/page/secondPage';
-import ForgotPassword from './src/page/forgotPassword';
-import ContactDetails from './src/page/contactDetails';
-import AddContactPage from './src/page/AddContactPage';
-import ModifyContact from './src/page/ModifyContact';
-
+import ForgotPassword from './src/page/BasePage/ForgotPassword';
+import ContactDetails from './src/page/Contact/contactDetails';
+import AddContactPage from './src/page/Contact/AddContactPage';
+import ModifyContact from './src/page/Contact/ModifyContact';
+import RegisterPage from './src/page/BasePage/RegisterPage';
+import ShowMySelf from './src/page/MySelf/mySelf';
+import MySelfDetails from './src/page/MySelf/mySelfDetails';
+import ModifyMySelf from './src/page/MySelf/modifyMyself';
+import ErrorMessage from './src/page/Plugins/ErrorMessage';
+import { storeData, getData } from './src/page/Plugins/StorageUtils';
+import { API_BASE_URL } from './src/page/Plugins/EndPoints';
 
 
 const HomeScreen = ({ navigation }) => {
-
-  const [loginText, onChangeLoginText] = React.useState('');
-  const [passwordText, onChangePasswordText] = React.useState('');
-
-  const storeData = async (value) => { // Secure Way to store data
-    try {
-      const jsonValue = JSON.stringify(value)
-      await AsyncStorage.setItem('token', jsonValue)
-    } catch (e) {
-      // saving error
-    }
-  }
-
-const getData = async () => {
-  try {
-    const jsonValue = await AsyncStorage.getItem('token')
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
-  } catch(e) {
-    // error reading value
-  }
-}
+  const [loginText, setLoginText] = useState('');
+  const [passwordText, setPasswordText] = useState('');
+  const [responseText, setResponseText] = useState('');
 
   const login = async () => {
     try {
@@ -45,7 +30,7 @@ const getData = async () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Set the desired Access-Control-Allow-Origin header
+          'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify({
           username: loginText,
@@ -53,21 +38,25 @@ const getData = async () => {
         }),
       };
 
-      const response = await fetch('http://0.0.0.0:8080/api/v1/login', requestOptions); //store data la dessus
-      const data = storeData(await response.json());
+      const response = await fetch(`${API_BASE_URL}/login`, requestOptions);
 
-      const token = await getData(); // Assuming the server returns the token in the response
-      console.log(token);
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        console.log(errorMessage);
+        setResponseText(errorMessage);
+      } 
+      else {
+        const dataResponse = await response.json();
+        await storeData(dataResponse);
+        //VOIR CHATGPT        
+        console.log(dataResponse);
 
-      // Store the token securely (e.g., in cookies or local storage) for subsequent requests
-      navigation.navigate('Details', {
-        token: token.token,
-      });
+        navigation.navigate('Details');
+      }
     } catch (error) {
       console.log(error);
     }
   };
-  
 
   return (
     <View style={styles.container}>
@@ -76,28 +65,36 @@ const getData = async () => {
         <TextInput
           style={styles.textInput}
           placeholder='Login'
-          onChangeText={(loginText) => onChangeLoginText(loginText)} />
+          onChangeText={setLoginText}
+          value={loginText}
+        />
       </View>
       <View>
         <TextInput
           style={styles.textInput}
           placeholder='Password'
           secureTextEntry={true}
-          onChangeText={(passwordText) => onChangePasswordText(passwordText)} />
+          onChangeText={setPasswordText}
+          value={passwordText}
+        />
       </View>
 
-      <TouchableOpacity onPress={() => {
-        navigation.navigate('Forgot Password');
-      }}>
-        <Text style={styles.forgot_button}>Forgot Password?</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Forgot Password')}>
+        <Text style={styles.forgotButton}>Forgot Password?</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('RegisterPage')}>
+        <Text style={styles.forgotButton}>Sign Up</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginBtn} onPress={login}>
+      <ErrorMessage responseText={responseText} />
+
+      <TouchableOpacity style={styles.loginButton} onPress={login}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
+      <ErrorMessage responseText={responseText} />
     </View>
   );
-}
+};
 
 const Stack = createNativeStackNavigator();
 
@@ -111,40 +108,49 @@ const App = () => {
         <Stack.Screen name='ContactDetails' component={ContactDetails} />
         <Stack.Screen name='AddContactPage' component={AddContactPage} />
         <Stack.Screen name='ModifyContact' component={ModifyContact} />
+        <Stack.Screen name='RegisterPage' component={RegisterPage} />
+        <Stack.Screen name='ShowMySelf' component={ShowMySelf} />
+        <Stack.Screen name='MySelfDetails' component={MySelfDetails} />
+        <Stack.Screen name='ModifyMySelf' component={ModifyMySelf} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  style: {
-    flex: 1,
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
   textInput: {
     height: 50,
-    flex: 1,
+    width: 220,
     padding: 10,
-    marginLeft: 20,
-    backgroundColor: "#89CFF0",
+    backgroundColor: '#89CFF0',
     borderRadius: 80,
-    margin: 10,
+    marginVertical: 10,
+    marginHorizontal: 20,
   },
-  loginBtn: {
+  forgotButton: {
+    marginTop: 10,
+    color: '#888',
+    textDecorationLine: 'underline',
+  },
+  loginButton: {
     width: 200,
-    borderRadius: 25,
     height: 50,
-    alignItems: "center",
-    justifyContent: "center",
+    borderRadius: 25,
     marginTop: 40,
-    backgroundColor: "#89CFF0",
+    backgroundColor: '#89CFF0',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loginText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
