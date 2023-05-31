@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, ScrollView, TextInput, Alert } from 'react-native';
 
 import { getData, storeData } from '../Plugins/StorageUtils';
+import {API_BASE_URL} from '../Plugins/EndPoints';
+
 
 
 function AddContactPage({ navigation, route }) {
@@ -35,7 +37,7 @@ function AddContactPage({ navigation, route }) {
 
     // Envoyer les données du formulaire à la base de données en utilisant une requête HTTP POST
     function sendData(callback) {
-        fetch('http://0.0.0.0:8080/api/v1/contacts', {
+        fetch(`${API_BASE_URL}/contacts`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -142,7 +144,7 @@ function AddContactPage({ navigation, route }) {
                     title='Sauvegarder'
                     onPress={() => {
                         const regexPhoneNumber = new RegExp('^(?:[0-9]\\s?){2,14}[0-9]$'); // Compiler la regex en une expression régulière JavaScript valide
-                        if (firstName == "" || !regexPhoneNumber.test(phoneNumber)) { // Vérifier si phoneNumber ne correspond pas à la regex
+                        if (firstName == "") { // Vérifier si phoneNumber ne correspond pas à la regex
                             alert("Veuillez saisir un prénom et un numéro de téléphone valide");
                         } else {
                             sendData();

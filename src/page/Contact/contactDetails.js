@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Linking, Button, ScrollView } from 'react-native';
 
 import { getData, storeData } from '../Plugins/StorageUtils';
+import {API_BASE_URL} from '../Plugins/EndPoints';
+
 
 
 const ContactDetails = ({ navigation, route }) => {
@@ -26,7 +28,7 @@ const ContactDetails = ({ navigation, route }) => {
 
   const deleteContact = async () => {
     try {
-      const response = await fetch(`http://0.0.0.0:8080/api/v1/contacts/${contact.id}`, {
+      const response = await fetch(`${API_BASE_URL}/contacts/${contact.id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -60,7 +62,7 @@ const ContactDetails = ({ navigation, route }) => {
 
         <View style={styles.infoContainer}>
           <Text style={styles.infoLabel}>Phone Number</Text>
-          <Text style={styles.info}>{contact.phoneNumber}</Text>
+          <Text style={styles.info} onPress={() => Linking.openURL(`tel:${contact.phoneNumber}`)}>{contact.phoneNumber}</Text>
         </View>
 
         <View style={styles.infoContainer}>

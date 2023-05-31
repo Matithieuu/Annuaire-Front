@@ -10,8 +10,11 @@ import {
 } from 'react-native';
 
 import { storeData, getData } from './Plugins/StorageUtils';
+import {API_BASE_URL} from './Plugins/EndPoints';
 
 import ShowMySelf from './MySelf/mySelf';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import DisconnectComponent from './MySelf/Disconnect';
 
 function ShowAPI({ navigation, route }) {
   //const { dataResponse } = route.params;
@@ -29,7 +32,7 @@ function ShowAPI({ navigation, route }) {
   const fetchContactsData = async () => {
     try {
       const token = await fetchData();
-      const response = await fetch('http://localhost:8080/api/v1/contacts', {
+      const response = await fetch(`${API_BASE_URL}/contacts`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -119,7 +122,7 @@ function ShowAPI({ navigation, route }) {
                 })
               }
             >
-              <Text style={styles.contactName}>{contact.firstName}</Text>
+              <Text style={styles.contactName}>{contact.firstName} {contact.secondName}</Text>
               <Text>{contact.phoneNumber}</Text>
             </TouchableOpacity>
           ))}
@@ -145,9 +148,18 @@ export default function SecondPage({ navigation, route }) {
     fetchUserData();
   }, []);
 
+  const handleDisconnect = () => {
+    AsyncStorage.clear();
+    console.log(getData());
+    navigation.navigate('Home');
+  };
+
   return (
     <View style={styles.container}>
-      <ShowMySelf navigation={navigation} route={route} user={user} />
+      <View style={styles.myselfContainer}>
+        <ShowMySelf navigation={navigation} route={route} user={user} />
+        <DisconnectComponent onPress={handleDisconnect} />
+      </View>
       {user && <ShowAPI navigation={navigation} />}
       <View style={styles.buttonContainer}>
         <Button
@@ -166,11 +178,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+  myselfContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#fff',
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+  },
   searchBar: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
     marginTop: 10,
+    marginBottom: 10,
     paddingLeft: 10,
     paddingRight: 10,
   },

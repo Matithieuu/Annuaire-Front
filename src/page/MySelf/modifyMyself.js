@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, ScrollView, TextInput } from 'react-native';
 
 import { getData, storeData, mergeData } from '../Plugins/StorageUtils';
+import {API_BASE_URL} from '../Plugins/EndPoints';
 
 function ModifyUser({ navigation }) {
 
@@ -33,7 +34,7 @@ function ModifyUser({ navigation }) {
 
     const sendData = async () => {
         try {
-            const response = await fetch(`http://0.0.0.0:8080/api/v1/users/${userInfo.id}`, {
+            const response = await fetch(`${API_BASE_URL}/users/${userInfo.id}`, {
                 method: 'PUT',
                 headers: {
                     Authorization: `Bearer ${token}`,

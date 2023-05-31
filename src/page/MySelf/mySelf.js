@@ -39,6 +39,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     margin: 10,
+    width: '70%',
+    height: 50,
   },
   touchable: {
     backgroundColor: '#e0e0e0',
