@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { storeData } from '../Plugins/StorageUtils';
-import { API_BASE_URL } from '../Plugins/StorageUtils';
+import { getApiBaseUrl } from '../Plugins/StorageUtils';
 
 import ErrorMessage from '../Plugins/ErrorMessage';
 
@@ -17,6 +17,7 @@ const RegisterPage = ({ navigation }) => {
 
   const register = async () => {
     try {
+      const API_BASE_URL = await getApiBaseUrl(); // Await the resolution of the promise
       const requestOptions = {
         method: 'POST',
         headers: {

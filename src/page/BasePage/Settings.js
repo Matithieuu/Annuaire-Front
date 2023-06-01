@@ -38,7 +38,7 @@ function SettingsPage() {
 
     return (
         <View style={styles.container}>
-            <Text>Settings</Text>
+            <Text style={styles.title}>Settings</Text>
             <View>
                 <TextInput
                     style={styles.input}
@@ -49,6 +49,11 @@ function SettingsPage() {
                     autoCapitalize="none"
                 />
             </View>
+            <Text style={styles.text}>
+                It should be something like: https://api.example.com/api/v1 
+            </Text>
+
+
             <TouchableOpacity style={styles.save} onPress={handleSaveSettings}>
                 <Text>Save</Text>
             </TouchableOpacity>
@@ -57,6 +62,11 @@ function SettingsPage() {
 }
 
 const styles = StyleSheet.create({
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
     container: {
         flex: 1,
         padding: 20,
@@ -80,6 +90,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 5,
         marginTop: 10,
+    },
+    text: {
+        fontSize: 12,
+        color: '#A9A9A9',
+        textAlign: 'center',
+        marginBottom: 20,
     },
 });
 

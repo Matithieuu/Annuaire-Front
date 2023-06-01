@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Linking, Button, ScrollView } from 'react-native';
 
 import { getData, storeData } from '../Plugins/StorageUtils';
-import {API_BASE_URL} from '../Plugins/StorageUtils';
+import {getApiBaseUrl} from '../Plugins/StorageUtils';
 
 
 
@@ -28,6 +28,7 @@ const ContactDetails = ({ navigation, route }) => {
 
   const deleteContact = async () => {
     try {
+      const API_BASE_URL = await getApiBaseUrl(); // Await the resolution of the promise
       const response = await fetch(`${API_BASE_URL}/contacts/${contact.id}`, {
         method: 'DELETE',
         headers: {

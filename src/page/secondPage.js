@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import { storeData, getData, clearAsyncStorage } from './Plugins/StorageUtils';
-import {API_BASE_URL} from './Plugins/StorageUtils';
+import {getApiBaseUrl} from './Plugins/StorageUtils';
 
 import ShowMySelf from './MySelf/mySelf';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -31,6 +31,7 @@ function ShowAPI({ navigation, route }) {
 
   const fetchContactsData = async () => {
     try {
+      const API_BASE_URL = await getApiBaseUrl(); // Await the resolution of the promise
       const token = await fetchData();
       const response = await fetch(`${API_BASE_URL}/contacts`, {
         method: 'GET',
@@ -149,8 +150,9 @@ export default function SecondPage({ navigation, route }) {
   }, []);
 
   const handleDisconnect = () => {
-    console.log('Disconnect and clear storage');
-    AsyncStorage.clear();
+    console.log('Disconnect and clear token and user data');
+    //Clear token and user data (not the API url)
+    AsyncStorage.removeItem('@dataResponse');
     console.log(getData());
     navigation.navigate('Home');
   };

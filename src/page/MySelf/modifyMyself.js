@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, ScrollView, TextInput } from 'react-native';
 
 import { getData, storeData, mergeData } from '../Plugins/StorageUtils';
-import {API_BASE_URL} from '../Plugins/StorageUtils';
+import {getApiBaseUrl} from '../Plugins/StorageUtils';
 
 function ModifyUser({ navigation }) {
   const [user, setUser] = useState(null);
@@ -33,6 +33,7 @@ function ModifyUser({ navigation }) {
 
   const sendData = async () => {
     try {
+      const API_BASE_URL = await getApiBaseUrl(); // Await the resolution of the promise
       const response = await fetch(`${API_BASE_URL}/users/${userInfo.id}`, {
         method: 'PUT',
         headers: {

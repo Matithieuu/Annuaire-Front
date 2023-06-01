@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, ScrollView, TextInput, KeyboardAvoidingView } from 'react-native';
 
 import { getData, storeData } from '../Plugins/StorageUtils';
-import { API_BASE_URL } from '../Plugins/StorageUtils';
+import { getApiBaseUrl } from '../Plugins/StorageUtils';
 
 function ModifyContact({ navigation, route }) {
   const { contact } = route.params;
@@ -31,8 +31,9 @@ function ModifyContact({ navigation, route }) {
   const [addressChange, setAddress] = useState(contact.address);
   const [urlChange, setUrl] = useState(contact.companyURL);
 
-  function sendData(firstName, lastName, company, phoneNumber, faxNumber, email, address, url, contact) {
+  async function sendData(firstName, lastName, company, phoneNumber, faxNumber, email, address, url, contact) {
     console.log(contact.id);
+    const API_BASE_URL = await getApiBaseUrl(); // Await the resolution of the promise
     fetch(`${API_BASE_URL}/contacts/${contact.id}`, {
       method: 'PUT',
       headers: {

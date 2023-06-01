@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, ScrollView, TextInput, Alert } from 'react-native';
 
 import { getData, storeData } from '../Plugins/StorageUtils';
-import {API_BASE_URL} from '../Plugins/StorageUtils';
+import {getApiBaseUrl} from '../Plugins/StorageUtils';
 
 
 
@@ -36,7 +36,8 @@ function AddContactPage({ navigation, route }) {
     const [url, setUrl] = React.useState('');
 
     // Envoyer les données du formulaire à la base de données en utilisant une requête HTTP POST
-    function sendData(callback) {
+    async function sendData(callback) {
+        const API_BASE_URL = await getApiBaseUrl(); // Await the resolution of the promise
         fetch(`${API_BASE_URL}/contacts`, {
             method: 'POST',
             headers: {
