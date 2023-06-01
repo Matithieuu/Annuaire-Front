@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Linking, Button, ScrollView } from 'react-native';
 
 import { getData, storeData } from '../Plugins/StorageUtils';
-import {API_BASE_URL} from '../Plugins/EndPoints';
+import {API_BASE_URL} from '../Plugins/StorageUtils';
 
 
 

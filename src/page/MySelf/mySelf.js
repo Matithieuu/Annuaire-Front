@@ -37,9 +37,8 @@ export default function ShowMySelf({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    alignItems: 'center',
     margin: 10,
-    width: '70%',
+    width: '65%',
     height: 50,
   },
   touchable: {

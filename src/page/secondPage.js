@@ -9,8 +9,8 @@ import {
   TextInput,
 } from 'react-native';
 
-import { storeData, getData } from './Plugins/StorageUtils';
-import {API_BASE_URL} from './Plugins/EndPoints';
+import { storeData, getData, clearAsyncStorage } from './Plugins/StorageUtils';
+import {API_BASE_URL} from './Plugins/StorageUtils';
 
 import ShowMySelf from './MySelf/mySelf';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -149,6 +149,7 @@ export default function SecondPage({ navigation, route }) {
   }, []);
 
   const handleDisconnect = () => {
+    console.log('Disconnect and clear storage');
     AsyncStorage.clear();
     console.log(getData());
     navigation.navigate('Home');
@@ -179,6 +180,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   myselfContainer: {
+    justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, ScrollView, TextInput, KeyboardAvoidingView } from 'react-native';
 
 import { getData, storeData } from '../Plugins/StorageUtils';
-import { API_BASE_URL } from '../Plugins/EndPoints';
+import { API_BASE_URL } from '../Plugins/StorageUtils';
 
 function ModifyContact({ navigation, route }) {
   const { contact } = route.params;

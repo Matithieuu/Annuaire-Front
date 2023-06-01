@@ -16,13 +16,13 @@ const DisconnectComponent = ({ onPress }) => {
 
 const styles = {
   box: {
-    width: "120%",
     height: 64,
     backgroundColor: '#e0e0e0',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-    marginRight: 10,
+    padding: 10,
+    margin: 10,
   },
   image: {
     width: 50,

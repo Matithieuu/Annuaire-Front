@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { storeData } from '../Plugins/StorageUtils';
-import { API_BASE_URL } from '../Plugins/EndPoints';
+import { API_BASE_URL } from '../Plugins/StorageUtils';
 
 import ErrorMessage from '../Plugins/ErrorMessage';
 
