@@ -22,7 +22,7 @@ Annuaire-Front
 - [📍 Overview](#-overview)
 - [💫 Features](#-features)
 - [📂 Project Structure](#project-structure)
-- [🧩 Important Modules](#modules)
+- [🧩 Important Files](#modules)
 - [🚀 Getting Started](#-getting-started)
 - [📄 License](#-license)
 ---
@@ -92,9 +92,8 @@ repo
 
 <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/ec559a9f6bfd399b82bb44393651661b08aaf7ba/icons/folder-src-open.svg" width="80" />
 
-## 🧩 Important Modules
+## 🧩 Important Files
 
-<details closed><summary>Basepage</summary>
 
 | File              | Summary                                                                                                                    | Module                              |
 |:------------------|:---------------------------------------------------------------------------------------------------------------------------|:------------------------------------|
@@ -103,7 +102,6 @@ repo
 | ErrorMessage.js  | Composant to show errors | src/page/Plugins/ErrorMessage.js  |
 | SanitizeInput.js | Securize inputs againts XXS attacks | src/page/Plugins/SanitizeInput.js |                                |
 | StorageUtils.js  | Composant to securize data retrived by the API | src/page/Plugins/StorageUtils.js  |                                   |                              |
-</details>
 
 ---
 
