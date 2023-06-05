@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_BASE_URL } from '../Plugins/StorageUtils';
@@ -19,8 +19,8 @@ function SettingsPage() {
 
     async function saveApiUrl(apiUrl) {
         await AsyncStorage.setItem('@apiUrl', apiUrl);
-        mergeData({ apiUrl }); // Only pass the apiUrl as the value
-        setApiUrl(apiUrl); // Update the state with the new apiUrl value
+        mergeData({ apiUrl });
+        setApiUrl(apiUrl);
       }
       
 
@@ -28,7 +28,7 @@ function SettingsPage() {
         saveApiUrl(apiUrl);
         console.log(apiUrl);
         alert('Settings saved');
-        navigation.goBack(); // Go back to the previous screen
+        navigation.goBack();
     }
 
     useEffect(() => {

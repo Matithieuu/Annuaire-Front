@@ -1,31 +1,90 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, TouchableHighlight, ScrollView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Menu, MenuItem } from 'react-native-material-menu';
+import { useNavigation } from '@react-navigation/native';
 
-import SecondPage from './src/page/secondPage';
+import MainPage from './src/page/MainPage';
 import ForgotPassword from './src/page/BasePage/ForgotPassword';
-import ContactDetails from './src/page/Contact/contactDetails';
+import ContactDetails from './src/page/Contact/ContactDetails';
 import AddContactPage from './src/page/Contact/AddContactPage';
 import ModifyContact from './src/page/Contact/ModifyContact';
 import RegisterPage from './src/page/BasePage/RegisterPage';
-import ShowMySelf from './src/page/MySelf/mySelf';
-import MySelfDetails from './src/page/MySelf/mySelfDetails';
-import ModifyMySelf from './src/page/MySelf/modifyMyself';
+import ShowMySelf from './src/page/MySelf/MySelf';
+import MySelfDetails from './src/page/MySelf/MySelfDetails';
+import ModifyMySelf from './src/page/MySelf/ModifyMyself';
 import ErrorMessage from './src/page/Plugins/ErrorMessage';
-import { storeData, getData } from './src/page/Plugins/StorageUtils';
-import { API_BASE_URL } from './src/page/Plugins/EndPoints';
+import SettingsApp from './src/page/BasePage/Settings';
+import About from './src/page/BasePage/AboutPage';
+import { sanitizeInput } from './src/page/Plugins/SanitizeInput';
 
+import { storeData, getData, getApiBaseUrl } from './src/page/Plugins/StorageUtils';
 
-const HomeScreen = ({ navigation }) => {
+const MenuDeroulant = () => {
+  const [visible, setVisible] = useState(false);
+  const hideMenu = () => setVisible(false);
+  const showMenu = () => setVisible(true);
+
+  const navigation = useNavigation();
+
+  const goToSettings = () => {
+    navigation.navigate('SettingsPage');
+    hideMenu();
+  };
+
+  const goToAbout = () => {
+    navigation.navigate('About');
+    hideMenu();
+  };
+
+  return (
+    <View style={styles.scrollingMenu}>
+      <Menu
+        visible={visible}
+        anchor={
+          <TouchableHighlight onPress={showMenu}>
+            <Image
+              source={require('./assets/cogwheel.png')}
+              style={styles.imageTitleScrollingMenu}
+            ></Image>
+          </TouchableHighlight>
+        }
+        onRequestClose={hideMenu}
+      >
+        <MenuItem onPress={goToSettings}>Settings</MenuItem>
+        <MenuItem onPress={goToAbout}>About</MenuItem>
+      </Menu>
+    </View>
+  );
+};
+
+const LoginScreen = ({ navigation }) => {
   const [loginText, setLoginText] = useState('');
   const [passwordText, setPasswordText] = useState('');
   const [responseText, setResponseText] = useState('');
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const API_BASE_URL = await getApiBaseUrl();
+
+        console.log('Token and Users:', getData(), 'ApiURL:', API_BASE_URL);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const login = async () => {
     try {
+      const API_BASE_URL = await getApiBaseUrl();
+      const sanitizedLogin = sanitizeInput(loginText);
+      const sanitizedPassword = sanitizeInput(passwordText);
+
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -33,8 +92,8 @@ const HomeScreen = ({ navigation }) => {
           'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify({
-          username: loginText,
-          password: passwordText,
+          username: sanitizedLogin,
+          password: sanitizedPassword,
         }),
       };
 
@@ -42,16 +101,18 @@ const HomeScreen = ({ navigation }) => {
 
       if (!response.ok) {
         const errorMessage = await response.text();
-        console.log(errorMessage);
-        setResponseText(errorMessage);
-      } 
-      else {
+        if (errorMessage == null) {
+          setResponseText('Server is not responding');
+        } else {
+          console.log(errorMessage);
+          setResponseText(errorMessage);
+        }
+      } else {
         const dataResponse = await response.json();
         await storeData(dataResponse);
-        //VOIR CHATGPT        
         console.log(dataResponse);
 
-        navigation.navigate('Details');
+        navigation.navigate('MainPage');
       }
     } catch (error) {
       console.log(error);
@@ -59,12 +120,13 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <StatusBar style="auto" />
+      <MenuDeroulant />
       <View>
         <TextInput
           style={styles.textInput}
-          placeholder='Login'
+          placeholder="Login"
           onChangeText={setLoginText}
           value={loginText}
         />
@@ -72,7 +134,7 @@ const HomeScreen = ({ navigation }) => {
       <View>
         <TextInput
           style={styles.textInput}
-          placeholder='Password'
+          placeholder="Password"
           secureTextEntry={true}
           onChangeText={setPasswordText}
           value={passwordText}
@@ -86,15 +148,17 @@ const HomeScreen = ({ navigation }) => {
         <Text style={styles.forgotButton}>Sign Up</Text>
       </TouchableOpacity>
 
-      <ErrorMessage responseText={responseText} />
-
       <TouchableOpacity style={styles.loginButton} onPress={login}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
-      <ErrorMessage responseText={responseText} />
-    </View>
+
+      <View>
+        <Text>{responseText}</Text>
+      </View>
+    </ScrollView>
   );
 };
+
 
 const Stack = createNativeStackNavigator();
 
@@ -102,16 +166,18 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name='Home' component={HomeScreen} />
-        <Stack.Screen name='Details' component={SecondPage} />
-        <Stack.Screen name='Forgot Password' component={ForgotPassword} />
-        <Stack.Screen name='ContactDetails' component={ContactDetails} />
-        <Stack.Screen name='AddContactPage' component={AddContactPage} />
-        <Stack.Screen name='ModifyContact' component={ModifyContact} />
-        <Stack.Screen name='RegisterPage' component={RegisterPage} />
-        <Stack.Screen name='ShowMySelf' component={ShowMySelf} />
-        <Stack.Screen name='MySelfDetails' component={MySelfDetails} />
-        <Stack.Screen name='ModifyMySelf' component={ModifyMySelf} />
+        <Stack.Screen name="LoginPage" component={LoginScreen} />
+        <Stack.Screen name="MainPage" component={MainPage} />
+        <Stack.Screen name="Forgot Password" component={ForgotPassword} />
+        <Stack.Screen name="ContactDetails" component={ContactDetails} />
+        <Stack.Screen name="AddContactPage" component={AddContactPage} />
+        <Stack.Screen name="ModifyContact" component={ModifyContact} />
+        <Stack.Screen name="RegisterPage" component={RegisterPage} />
+        <Stack.Screen name="ShowMySelf" component={ShowMySelf} />
+        <Stack.Screen name="MySelfDetails" component={MySelfDetails} />
+        <Stack.Screen name="ModifyMySelf" component={ModifyMySelf} />
+        <Stack.Screen name="SettingsPage" component={SettingsApp} />
+        <Stack.Screen name="About" component={About} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -119,10 +185,11 @@ const App = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    flexGrow: 1,
+    backgroundColor: '#f5f5f5',
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'column',
   },
   textInput: {
     height: 50,
@@ -151,6 +218,21 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  scrollingMenu: {
+    position: 'absolute',
+    top: '5%',
+    left: '80%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 50,
+    height: 50,
+    backgroundColor: '#f5f5f5',
+    borderColor: '#f5f5f5',
+  },
+  imageTitleScrollingMenu: {
+    width: 35,
+    height: 35,
   },
 });
 

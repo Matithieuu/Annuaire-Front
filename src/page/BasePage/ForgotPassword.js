@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Button, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, View, Button, TextInput } from 'react-native';
 
-import { getData, storeData } from '../Plugins/StorageUtils';
-
-
-function ForgotPassword({ navigation, route }) {
+function ForgotPassword() {
     const [email, setEmail] = React.useState("");
     return (
         <View style={styles.container}>

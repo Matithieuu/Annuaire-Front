@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
-import { storeData } from '../Plugins/StorageUtils';
-import { getApiBaseUrl } from '../Plugins/StorageUtils';
-
+import {
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView
+} from 'react-native';
+import { storeData, getApiBaseUrl } from '../Plugins/StorageUtils';
 import ErrorMessage from '../Plugins/ErrorMessage';
 
 const RegisterPage = ({ navigation }) => {
@@ -15,42 +20,87 @@ const RegisterPage = ({ navigation }) => {
   const [address, setAddress] = useState('');
   const [responseText, setResponseText] = useState('');
 
-  const register = async () => {
-    try {
-      const API_BASE_URL = await getApiBaseUrl(); // Await the resolution of the promise
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Set the desired Access-Control-Allow-Origin header
-        },
-        body: JSON.stringify({
-          username: username,
-          password: password,
-          emailAddress: email,
-          phoneNumber: phoneNumber,
-          firstName: firstName,
-          lastName: lastName,
-          address: address,
-        }),
-      };
+  const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d@#$%^&*]{6,20}$/;
+  const phoneNumberRegex = /^\d{10}$/;
 
-      const response = await fetch(`${API_BASE_URL}/register`, requestOptions);
+  const [formErrors, setFormErrors] = useState({
+    username: '',
+    email: '',
+    password: '',
+    phoneNumber: '',
+  });
 
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        console.log(errorMessage); // Access the error message
-        setResponseText(errorMessage);
-      } else {
-        const dataResponse = await response.json();
-        await storeData(dataResponse);
-        console.log(dataResponse);
+  const validateForm = () => {
+    const errors = {};
 
-        navigation.navigate('Details');
-      }
-    } catch (error) {
-      console.log(error);
+    if (!usernameRegex.test(username)) {
+      errors.username = 'Invalid username';
     }
+
+    if (!emailRegex.test(email)) {
+      errors.email = 'Invalid email';
+    }
+
+    if (!passwordRegex.test(password)) {
+      errors.password = 'Invalid password';
+    }
+
+    if (!phoneNumberRegex.test(phoneNumber)) {
+      errors.phoneNumber = 'Invalid phone number';
+    }
+
+    setFormErrors(errors);
+
+    return Object.keys(errors).length === 0;
+  };
+
+  const register = async () => {
+    if (validateForm()) {
+      try {
+        const API_BASE_URL = await getApiBaseUrl();
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+          body: JSON.stringify({
+            username,
+            password,
+            emailAddress: email,
+            phoneNumber,
+            firstName,
+            lastName,
+            address,
+          }),
+        };
+
+        const response = await fetch(`${API_BASE_URL}/register`, requestOptions);
+
+        if (!response.ok) {
+          const errorMessage = await response.text();
+          console.log(errorMessage);
+          setResponseText(errorMessage);
+        } else {
+          const dataResponse = await response.json();
+          await storeData(dataResponse);
+          console.log(dataResponse);
+
+          navigation.navigate('MainPage');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const renderError = (field) => {
+    if (formErrors[field]) {
+      return <Text style={styles.errorText}>{formErrors[field]}</Text>;
+    }
+    return null;
   };
 
   return (
@@ -111,7 +161,10 @@ const RegisterPage = ({ navigation }) => {
           value={address}
         />
 
-        <ErrorMessage responseText={responseText} />
+        {renderError('username')}
+        {renderError('email')}
+        {renderError('password')}
+        {renderError('phoneNumber')}
 
         <TouchableOpacity style={styles.button} onPress={register}>
           <Text style={styles.buttonText}>Register</Text>
@@ -159,6 +212,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
   },
 });
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, ScrollView, TextInput, KeyboardAvoidingView } from 'react-native';
 
-import { getData, storeData } from '../Plugins/StorageUtils';
+import { getData } from '../Plugins/StorageUtils';
 import { getApiBaseUrl } from '../Plugins/StorageUtils';
 
 function ModifyContact({ navigation, route }) {
@@ -23,17 +23,18 @@ function ModifyContact({ navigation, route }) {
   }, []);
 
   const [firstNameChange, setFirstName] = useState(contact.firstName);
-  const [lastNameChange, setLastName] = useState(contact.secondName);
+  const [lastNameChange, setLastName] = useState(contact.lastName);
   const [companyChange, setCompany] = useState(contact.company);
   const [phoneNumberChange, setPhoneNumber] = useState(contact.phoneNumber);
   const [faxNumberChange, setFaxNumber] = useState(contact.fixeNumber);
   const [emailChange, setEmail] = useState(contact.emailAddress);
   const [addressChange, setAddress] = useState(contact.address);
   const [urlChange, setUrl] = useState(contact.companyURL);
+  const [notesChange, setNotes] = useState(contact.notes);
 
-  async function sendData(firstName, lastName, company, phoneNumber, faxNumber, email, address, url, contact) {
+  async function sendData(firstName, lastName, company, phoneNumber, faxNumber, email, address, url, notes, contact) {
     console.log(contact.id);
-    const API_BASE_URL = await getApiBaseUrl(); // Await the resolution of the promise
+    const API_BASE_URL = await getApiBaseUrl();
     fetch(`${API_BASE_URL}/contacts/${contact.id}`, {
       method: 'PUT',
       headers: {
@@ -44,18 +45,19 @@ function ModifyContact({ navigation, route }) {
       body: JSON.stringify({
         company,
         firstName,
-        secondName: lastName,
+        lastName: lastName,
         phoneNumber,
         fixeNumber: faxNumber,
         emailAddress: email,
         address,
         companyURL: url,
+        notes: notes,
       }),
     })
       .then((response) => {
         console.log(response);
         if (response.status === 202) {
-          navigation.navigate('Details', { contact: contact });
+          navigation.navigate('MainPage', { contact: contact });
           return response.json();
         } else {
           throw new Error('Unexpected response status: ' + response.status);
@@ -104,11 +106,16 @@ function ModifyContact({ navigation, route }) {
           <Text style={styles.label}>URL Company</Text>
           <TextInput style={styles.input} onChangeText={setUrl} value={urlChange} />
         </View>
+        <View style={styles.box}>
+          <Text style={styles.label}>Notes</Text>
+          <TextInput style={styles.inputNotes} onChangeText={setNotes} value={notesChange} multiline={true} />
+        </View>
+
         <Button
           title="Sauvegarder"
           onPress={() => {
-            console.log(firstNameChange, lastNameChange, companyChange, phoneNumberChange, faxNumberChange, emailChange, addressChange, urlChange, contact);
-            sendData(firstNameChange, lastNameChange, companyChange, phoneNumberChange, faxNumberChange, emailChange, addressChange, urlChange, contact);
+            console.log(firstNameChange, lastNameChange, companyChange, phoneNumberChange, faxNumberChange, emailChange, addressChange, urlChange, notesChange, contact);
+            sendData(firstNameChange, lastNameChange, companyChange, phoneNumberChange, faxNumberChange, emailChange, addressChange, urlChange, notesChange, contact);
           }}
         />
       </ScrollView>
@@ -139,6 +146,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     padding: 10,
     borderRadius: 5,
+  },
+  inputNotes: {
+    margin: 2,
+    backgroundColor: '#FFFFFF',
+    padding: 10,
+    borderRadius: 5,
+    height: 100,
+    textAlignVertical: 'top',
   },
 });
 

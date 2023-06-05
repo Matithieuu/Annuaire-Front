@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, ScrollView, TextInput, Alert } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView, TextInput } from 'react-native';
 
-import { getData, storeData } from '../Plugins/StorageUtils';
-import {getApiBaseUrl} from '../Plugins/StorageUtils';
+import { getData } from '../Plugins/StorageUtils';
+import { getApiBaseUrl } from '../Plugins/StorageUtils';
 
-
-
-function AddContactPage({ navigation, route }) {
-
+function AddContactPage({ navigation }) {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState('');
 
@@ -21,11 +18,9 @@ function AddContactPage({ navigation, route }) {
                 console.log(error);
             }
         };
-
         fetchUserData();
     }, []);
 
-    // Définir les états pour chaque champ de formulaire
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
     const [company, setCompany] = React.useState('');
@@ -34,10 +29,10 @@ function AddContactPage({ navigation, route }) {
     const [email, setEmail] = React.useState('');
     const [address, setAddress] = React.useState('');
     const [url, setUrl] = React.useState('');
+    const [notes, setNotes] = React.useState('');
 
-    // Envoyer les données du formulaire à la base de données en utilisant une requête HTTP POST
     async function sendData(callback) {
-        const API_BASE_URL = await getApiBaseUrl(); // Await the resolution of the promise
+        const API_BASE_URL = await getApiBaseUrl();
         fetch(`${API_BASE_URL}/contacts`, {
             method: 'POST',
             headers: {
@@ -46,18 +41,19 @@ function AddContactPage({ navigation, route }) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "company": company,
-                "firstName": firstName,
-                "secondName": lastName,
-                "phoneNumber": phoneNumber,
-                "fixeNumber": faxNumber,
-                "emailAddress": email,
-                "address": address,
-                "companyURL": url,
+                company,
+                firstName,
+                lastName,
+                phoneNumber,
+                fixeNumber: faxNumber,
+                emailAddress: email,
+                address,
+                companyURL: url,
+                notes,
             })
         })
             .then(response => {
-                navigation.navigate('Details');
+                navigation.navigate('MainPage');
                 return response.json();
             })
             .then(data => {
@@ -65,12 +61,10 @@ function AddContactPage({ navigation, route }) {
                 callback();
             })
             .catch(error => {
-                console.error(error);
+                console.log(error);
             });
 
     }
-
-    // Rendu de l'interface utilisateur
 
     return (
         <ScrollView>
@@ -141,12 +135,22 @@ function AddContactPage({ navigation, route }) {
                         value={url}
                     />
                 </View>
+
+                <View style={styles.box}>
+                    <Text style={styles.label}>Notes</Text>
+                    <TextInput
+
+                        style={styles.inputNotes}
+                        onChangeText={setNotes}
+                        value={notes}
+                    />
+                </View>
+
                 <Button
                     title='Sauvegarder'
                     onPress={() => {
-                        const regexPhoneNumber = new RegExp('^(?:[0-9]\\s?){2,14}[0-9]$'); // Compiler la regex en une expression régulière JavaScript valide
                         if (firstName == "") { // Vérifier si phoneNumber ne correspond pas à la regex
-                            alert("Veuillez saisir un prénom et un numéro de téléphone valide");
+                            alert("Veuillez saisir un prénom");
                         } else {
                             sendData();
                         }
@@ -177,6 +181,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         padding: 10,
         borderRadius: 5,
+    },
+    inputNotes: {
+        backgroundColor: '#FFFFFF',
+        padding: 10,
+        borderRadius: 5,
+        height: 100,
     },
 });
 
