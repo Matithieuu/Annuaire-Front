@@ -67,7 +67,7 @@ function ModifyContact({ navigation, route }) {
         console.log(data);
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
       });
   }
 

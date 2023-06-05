@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, ScrollView, TextInput } from 'react-native';
 
 import { getData, storeData, mergeData } from '../Plugins/StorageUtils';
-import { getApiBaseUrl } from '../Plugins/StorageUtils';
+import {getApiBaseUrl} from '../Plugins/StorageUtils';
 
 function ModifyUser({ navigation }) {
   const [user, setUser] = useState(null);
@@ -33,7 +33,7 @@ function ModifyUser({ navigation }) {
 
   const sendData = async () => {
     try {
-      const API_BASE_URL = await getApiBaseUrl();
+      const API_BASE_URL = await getApiBaseUrl(); // Await the resolution of the promise
       const response = await fetch(`${API_BASE_URL}/users/${userInfo.id}`, {
         method: 'PUT',
         headers: {
@@ -55,7 +55,7 @@ function ModifyUser({ navigation }) {
       const data = await response.json();
       console.log(data);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#F5F5F5',
-    flexDirection: 'column',
+    flexDirection: 'column', // Set flexDirection to 'column'
   },
   box: {
     marginBottom: 20,
