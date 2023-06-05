@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, ScrollView, TextInput } from 'react-native';
 
-import { getData, storeData, mergeData } from '../Plugins/StorageUtils';
+import { getData, mergeData } from '../Plugins/StorageUtils';
 import {getApiBaseUrl} from '../Plugins/StorageUtils';
 
 function ModifyUser({ navigation }) {
