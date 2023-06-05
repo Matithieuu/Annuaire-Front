@@ -1,11 +1,10 @@
-
 <div align="center">
 <h1 align="center">
 <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/ec559a9f6bfd399b82bb44393651661b08aaf7ba/icons/folder-markdown-open.svg" width="100" />
 <br>
 Annuaire-Front
 </h1>
-<h3 align="center">📍 Annuaire de contacts pour lire, ajouter, modifier et supprimer des contacts </h3>
+<h3 align="center">📍 Directory of contacts for reading, adding, modifying, and deleting contacts </h3>
 <h3 align="center">⚙️ Developed with the software and tools below:</h3>
 
 <p align="center">
@@ -29,13 +28,13 @@ Annuaire-Front
 
 
 ## 📍 Overview
-Annuaire de contacts en React Native.
+Contacts directory in React Native.
 
 ---
 
 ## 💫 Features
 
-Annuaire qui permet de se connecter ou de s'enregistrer pour lire, ajouter, supprimer ou modifer des contacts.
+Directory that allows users to log in or register in order to read, add, delete, or modify contacts.
 
 ---
 
