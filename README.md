@@ -5,8 +5,7 @@
 <br>
 Annuaire-Front
 </h1>
-<h3 align="center">📍 Error generating file summary. Exception: Client error '409 Conflict' for url 'https://api.openai.com/v1/chat/completions'
-For more information check: https://httpstatuses.com/409</h3>
+<h3 align="center">📍 Annuaire de contacts pour lire, ajouter, modifier et supprimer des contacts </h3>
 <h3 align="center">⚙️ Developed with the software and tools below:</h3>
 
 <p align="center">
