@@ -103,7 +103,7 @@ function ShowAPI({ navigation, route }) {
     <ScrollView style={styles.container}>
       <TextInput
         style={styles.searchBar}
-        placeholder="🔎 Search..."
+        placeholder="🔎 Recherche"
         onChangeText={handleSearch}
         value={searchQuery}
       />
@@ -121,7 +121,7 @@ function ShowAPI({ navigation, route }) {
                 })
               }
             >
-              <Text style={styles.contactName}>{contact.firstName} {contact.lastName}</Text>
+              <Text style={styles.contactName}> {contact.lastName} {contact.firstName}</Text>
               <Text>{contact.phoneNumber}</Text>
             </TouchableOpacity>
           ))}

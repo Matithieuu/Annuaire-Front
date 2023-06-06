@@ -26,17 +26,17 @@ const UserDetails = ({ navigation }) => {
         </View>
 
         <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>Phone Number</Text>
+          <Text style={styles.infoLabel}>Numéro de Téléphone</Text>
           <Text style={styles.info}>{user && user.phoneNumber}</Text>
         </View>
 
         <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>Email Address</Text>
+          <Text style={styles.infoLabel}>Adresse Email</Text>
           <Text style={styles.info}>{user && user.emailAddress}</Text>
         </View>
 
         <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>Address</Text>
+          <Text style={styles.infoLabel}>Adresse</Text>
           <Text style={styles.info}>{user && user.address}</Text>
         </View>
 

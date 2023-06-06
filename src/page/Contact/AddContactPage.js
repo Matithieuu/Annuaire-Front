@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView, TextInput, KeyboardAvoidingView } from 'react-native';
 
 import { getData } from '../Plugins/StorageUtils';
 import { getApiBaseUrl } from '../Plugins/StorageUtils';
@@ -67,6 +67,7 @@ function AddContactPage({ navigation }) {
     }
 
     return (
+        <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={100}>
         <ScrollView>
             <View style={styles.container}>
                 <View style={styles.box}>
@@ -86,7 +87,7 @@ function AddContactPage({ navigation }) {
                     />
                 </View>
                 <View style={styles.box}>
-                    <Text style={styles.label}>Company</Text>
+                    <Text style={styles.label}>Société</Text>
                     <TextInput
                         style={styles.input}
                         onChangeText={setCompany}
@@ -100,15 +101,6 @@ function AddContactPage({ navigation }) {
                         style={styles.input}
                         onChangeText={setPhoneNumber}
                         value={phoneNumber}
-                    />
-                </View>
-                <View style={styles.box}>
-                    <Text style={styles.label}>Numéro de fax</Text>
-                    <TextInput
-                        keyboardType="numeric"
-                        style={styles.input}
-                        onChangeText={setFaxNumber}
-                        value={faxNumber}
                     />
                 </View>
                 <View style={styles.box}>
@@ -128,7 +120,7 @@ function AddContactPage({ navigation }) {
                     />
                 </View>
                 <View style={styles.box}>
-                    <Text style={styles.label}>URL Company</Text>
+                    <Text style={styles.label}>Lien WEB</Text>
                     <TextInput
                         style={styles.input}
                         onChangeText={setUrl}
@@ -139,7 +131,6 @@ function AddContactPage({ navigation }) {
                 <View style={styles.box}>
                     <Text style={styles.label}>Notes</Text>
                     <TextInput
-
                         style={styles.inputNotes}
                         onChangeText={setNotes}
                         value={notes}
@@ -155,10 +146,10 @@ function AddContactPage({ navigation }) {
                             sendData();
                         }
                     }}
-
                 />
             </View>
         </ScrollView>
+        </KeyboardAvoidingView>
     );
 }
 

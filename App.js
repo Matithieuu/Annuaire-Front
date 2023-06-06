@@ -141,13 +141,6 @@ const LoginScreen = ({ navigation }) => {
         />
       </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Forgot Password')}>
-        <Text style={styles.forgotButton}>Forgot Password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('RegisterPage')}>
-        <Text style={styles.forgotButton}>Sign Up</Text>
-      </TouchableOpacity>
-
       <TouchableOpacity style={styles.loginButton} onPress={login}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
@@ -168,11 +161,9 @@ const App = () => {
       <Stack.Navigator>
         <Stack.Screen name="LoginPage" component={LoginScreen} />
         <Stack.Screen name="MainPage" component={MainPage} />
-        <Stack.Screen name="Forgot Password" component={ForgotPassword} />
         <Stack.Screen name="ContactDetails" component={ContactDetails} />
         <Stack.Screen name="AddContactPage" component={AddContactPage} />
         <Stack.Screen name="ModifyContact" component={ModifyContact} />
-        <Stack.Screen name="RegisterPage" component={RegisterPage} />
         <Stack.Screen name="ShowMySelf" component={ShowMySelf} />
         <Stack.Screen name="MySelfDetails" component={MySelfDetails} />
         <Stack.Screen name="ModifyMySelf" component={ModifyMySelf} />
@@ -237,3 +228,20 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
+/*
+ <TouchableOpacity onPress={() => navigation.navigate('RegisterPage')}>
+        <Text style={styles.forgotButton}>Sign Up</Text>
+      </TouchableOpacity>
+
+              <Stack.Screen name="RegisterPage" component={RegisterPage} />
+
+ */
+
+/*
+        <Stack.Screen name="Forgot Password" component={ForgotPassword} />
+
+      <TouchableOpacity onPress={() => navigation.navigate('Forgot Password')}>
+        <Text style={styles.forgotButton}>Forgot Password?</Text>
+      </TouchableOpacity>
+ */
