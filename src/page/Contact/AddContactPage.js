@@ -8,6 +8,7 @@ function AddContactPage({ navigation }) {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState('');
 
+
     useEffect(() => {
         const fetchUserData = async () => {
             try {

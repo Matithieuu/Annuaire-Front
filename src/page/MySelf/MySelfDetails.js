@@ -18,6 +18,18 @@ const UserDetails = ({ navigation }) => {
     fetchUserData();
   }, []);
 
+  useEffect(() => {
+    // Configuration du bouton dans la barre de navigation
+    navigation.setOptions({
+      headerRight: () => (
+          <Button
+              title="Ajouter un utilisateur"
+              onPress={() => navigation.navigate('RegisterPage')}
+          />
+      ),
+    });
+  }, [navigation]);
+
   return (
     <ScrollView>
       <View style={styles.container}>

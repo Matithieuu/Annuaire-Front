@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   TextInput,
@@ -7,7 +7,7 @@ import {
   ScrollView,
   KeyboardAvoidingView
 } from 'react-native';
-import { storeData, getApiBaseUrl } from '../Plugins/StorageUtils';
+import {storeData, getApiBaseUrl, getData} from '../Plugins/StorageUtils';
 import ErrorMessage from '../Plugins/ErrorMessage';
 
 const RegisterPage = ({ navigation }) => {
@@ -19,11 +19,26 @@ const RegisterPage = ({ navigation }) => {
   const [lastName, setLastName] = useState('');
   const [address, setAddress] = useState('');
   const [responseText, setResponseText] = useState('');
+  const [token, setToken] = useState('');
+
 
   const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d@#$%^&*]{6,20}$/;
   const phoneNumberRegex = /^\d{10}$/;
+
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const storedData = await getData();
+        setToken(storedData.token);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUserData();
+  }, []);
 
   const [formErrors, setFormErrors] = useState({
     username: '',
@@ -62,7 +77,9 @@ const RegisterPage = ({ navigation }) => {
         const API_BASE_URL = await getApiBaseUrl();
         const requestOptions = {
           method: 'POST',
+
           headers: {
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
           },
@@ -85,7 +102,6 @@ const RegisterPage = ({ navigation }) => {
           setResponseText(errorMessage);
         } else {
           const dataResponse = await response.json();
-          await storeData(dataResponse);
           console.log(dataResponse);
 
           navigation.navigate('MainPage');

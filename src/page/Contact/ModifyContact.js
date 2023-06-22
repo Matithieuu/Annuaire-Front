@@ -45,13 +45,13 @@ function ModifyContact({ navigation, route }) {
       body: JSON.stringify({
         company,
         firstName,
-        lastName: lastName,
+        lastName,
         phoneNumber,
         fixeNumber: faxNumber,
         emailAddress: email,
         address,
         companyURL: url,
-        notes: notes,
+        notes,
       }),
     })
       .then((response) => {
@@ -89,10 +89,6 @@ function ModifyContact({ navigation, route }) {
         <View style={styles.box}>
           <Text style={styles.label}>Numéro de téléphone</Text>
           <TextInput style={styles.input} onChangeText={setPhoneNumber} value={phoneNumberChange} />
-        </View>
-        <View style={styles.box}>
-          <Text style={styles.label}>Numéro de fax</Text>
-          <TextInput style={styles.input} onChangeText={setFaxNumber} value={faxNumberChange} />
         </View>
         <View style={styles.box}>
           <Text style={styles.label}>Adresse email</Text>

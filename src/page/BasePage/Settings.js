@@ -27,7 +27,7 @@ function SettingsPage() {
     function handleSaveSettings() {
         saveApiUrl(apiUrl);
         console.log(apiUrl);
-        alert('Settings saved');
+        alert('Paramètres enregistrés');
         navigation.goBack();
     }
 
@@ -38,7 +38,7 @@ function SettingsPage() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Settings</Text>
+            <Text style={styles.title}>Paramètres</Text>
             <View>
                 <TextInput
                     style={styles.input}
@@ -50,7 +50,7 @@ function SettingsPage() {
                 />
             </View>
             <Text style={styles.text}>
-                It should be something like: https://api.example.com/api/v1 
+                Cela devrait ressembler à: https://api.example.com/api/v1
             </Text>
 
 

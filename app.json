@@ -16,7 +16,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-        "bundleIdentifier": "com.annuaire.annuaire"
+      "bundleIdentifier": "com.annuaire.annuaire"
     },
     "android": {
       "adaptiveIcon": {
@@ -27,6 +27,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "84dfc31a-13e6-4a5b-a6d1-5fa624c7b06c"
+      }
     }
   }
 }

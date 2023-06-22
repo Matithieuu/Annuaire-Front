@@ -7,17 +7,15 @@ import { Menu, MenuItem } from 'react-native-material-menu';
 import { useNavigation } from '@react-navigation/native';
 
 import MainPage from './src/page/MainPage';
-import ForgotPassword from './src/page/BasePage/ForgotPassword';
 import ContactDetails from './src/page/Contact/ContactDetails';
 import AddContactPage from './src/page/Contact/AddContactPage';
 import ModifyContact from './src/page/Contact/ModifyContact';
-import RegisterPage from './src/page/BasePage/RegisterPage';
 import ShowMySelf from './src/page/MySelf/MySelf';
 import MySelfDetails from './src/page/MySelf/MySelfDetails';
 import ModifyMySelf from './src/page/MySelf/ModifyMyself';
-import ErrorMessage from './src/page/Plugins/ErrorMessage';
 import SettingsApp from './src/page/BasePage/Settings';
 import About from './src/page/BasePage/AboutPage';
+import RegisterPage from "./src/page/BasePage/RegisterPage";
 import { sanitizeInput } from './src/page/Plugins/SanitizeInput';
 
 import { storeData, getData, getApiBaseUrl } from './src/page/Plugins/StorageUtils';
@@ -53,8 +51,8 @@ const MenuDeroulant = () => {
         }
         onRequestClose={hideMenu}
       >
-        <MenuItem onPress={goToSettings}>Settings</MenuItem>
-        <MenuItem onPress={goToAbout}>About</MenuItem>
+        <MenuItem onPress={goToSettings}>Paramètres</MenuItem>
+        <MenuItem onPress={goToAbout}>A propos</MenuItem>
       </Menu>
     </View>
   );
@@ -169,6 +167,7 @@ const App = () => {
         <Stack.Screen name="ModifyMySelf" component={ModifyMySelf} />
         <Stack.Screen name="SettingsPage" component={SettingsApp} />
         <Stack.Screen name="About" component={About} />
+        <Stack.Screen name="RegisterPage" component={RegisterPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

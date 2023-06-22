@@ -161,10 +161,10 @@ export default function MainPage({ navigation, route }) {
         <ShowMySelf navigation={navigation} route={route} user={user} />
         <DisconnectComponent onPress={handleDisconnect} />
       </View>
-      {user && <ShowAPI navigation={navigation} />}
+      <ShowAPI navigation={navigation} />
       <View style={styles.buttonContainer}>
         <Button
-          title="Add Contact"
+          title="Ajouter un contact"
           onPress={() =>
             navigation.navigate('AddContactPage')
           }
