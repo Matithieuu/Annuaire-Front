@@ -25,7 +25,6 @@ const UserDetails = ({ navigation }) => {
                 <Button
                     title="Ajouter un utilisateur"
                     onPress={() => navigation.navigate('RegisterPage')}
-                    color="#fff"
                 />
             ),
             headerTitleAlign: 'center', // Centrer le header
