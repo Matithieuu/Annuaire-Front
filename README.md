@@ -143,3 +143,6 @@ npm test
 ## 📄 License
 
 This project is licensed under the `[📌 MIT License]` License. See the [LICENSE](https://github.com/Matithieuu/Annuaire-Front/blob/main/LICENSE) file for additional info.
+
+
+The code is not insane. Old project
